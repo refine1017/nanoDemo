@@ -1,0 +1,26 @@
+[core]
+# enable debug mode
+debug = true
+heartbeat = 30
+
+[game]
+host = "127.0.0.1"
+port = 33251
+
+# Redis server config
+[redis]
+host = "127.0.0.1"
+port = 6357
+
+# Mysql server config
+[database]
+host = "127.0.0.1"
+port = 3306
+name = "nano_server"
+password = "root"
+username = "root"
+args = "charset=utf8mb4"
+max_idle_conns = 20
+max_open_conns = 15
+show_sql = true
+
