@@ -18,12 +18,12 @@ var (
 	logger = logrus.WithField("component", "game")
 )
 
-func Startup() {
+func Startup() error {
 	rand.Seed(time.Now().Unix())
 
 	if err := db.Startup(); err != nil {
 		logger.Error("db startup with err: %v", err)
-		return
+		return err
 	}
 
 	logger.Info("game service startup")
@@ -46,4 +46,6 @@ func Startup() {
 		nano.WithSerializer(json.NewSerializer()),
 		nano.WithComponents(comps),
 	)
+
+	return nil
 }

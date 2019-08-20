@@ -3,9 +3,21 @@
 debug = true
 heartbeat = 30
 
+[gate]
+host = "127.0.0.1"
+port = 30001
+
+[login]
+host = "127.0.0.1"
+port = 30002
+
 [game]
 host = "127.0.0.1"
-port = 33251
+port = 30003
+
+[db]
+host = "127.0.0.1"
+port = 30004
 
 # Redis server config
 [redis]
