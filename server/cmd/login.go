@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/urfave/cli"
-	"server/game"
+	"server/login"
 )
 
 var Login = cli.Command{
@@ -13,5 +13,5 @@ var Login = cli.Command{
 }
 
 func runLogin(c *cli.Context) error {
-	return game.Startup()
+	return login.Startup()
 }

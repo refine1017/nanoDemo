@@ -1,4 +1,4 @@
-package game
+package login
 
 import (
 	"fmt"
@@ -13,19 +13,18 @@ import (
 )
 
 var (
-	logger = logrus.WithField("component", "game")
+	logger = logrus.WithField("component", "login")
 )
 
 func Startup() error {
 	rand.Seed(time.Now().Unix())
 
-	logger.Info("game service startup")
+	logger.Info("login service startup")
 
 	// register game handler
 	comps := &component.Components{}
-	comps.Register(playerManager)
 
-	addr := fmt.Sprintf("%s:%d", viper.GetString("game.host"), viper.GetInt("game.port"))
+	addr := fmt.Sprintf("%s:%d", viper.GetString("login.host"), viper.GetInt("login.port"))
 	nano.Listen(addr,
 		nano.WithHeartbeatInterval(time.Duration(viper.GetInt("core.heartbeat"))*time.Second),
 		nano.WithLogger(logger),

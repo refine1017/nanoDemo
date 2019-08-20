@@ -1,4 +1,4 @@
-package game
+package db
 
 import (
 	"fmt"
@@ -13,11 +13,16 @@ import (
 )
 
 var (
-	logger = logrus.WithField("component", "game")
+	logger = logrus.WithField("component", "db")
 )
 
 func Startup() error {
 	rand.Seed(time.Now().Unix())
+
+	if err := initOrm(); err != nil {
+		logger.Error("orm init with err: %v", err)
+		return err
+	}
 
 	logger.Info("game service startup")
 
@@ -25,7 +30,7 @@ func Startup() error {
 	comps := &component.Components{}
 	comps.Register(playerManager)
 
-	addr := fmt.Sprintf("%s:%d", viper.GetString("game.host"), viper.GetInt("game.port"))
+	addr := fmt.Sprintf("%s:%d", viper.GetString("db.host"), viper.GetInt("db.port"))
 	nano.Listen(addr,
 		nano.WithHeartbeatInterval(time.Duration(viper.GetInt("core.heartbeat"))*time.Second),
 		nano.WithLogger(logger),

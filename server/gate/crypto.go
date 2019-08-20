@@ -1,4 +1,4 @@
-package game
+package gate
 
 import (
 	"encoding/base64"
@@ -28,7 +28,7 @@ func (c *Crypto) inbound(s *session.Session, msg *pipeline.Message) error {
 
 	out = xxtea.Decrypt(out, c.key)
 	if out == nil {
-		return fmt.Errorf("decrypt error=%s", err.Error())
+		return fmt.Errorf("decrypt out == nil")
 	}
 	msg.Data = out
 	return nil

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/urfave/cli"
-	"server/game"
+	"server/gate"
 )
 
 var Gate = cli.Command{
@@ -13,5 +13,5 @@ var Gate = cli.Command{
 }
 
 func runGate(c *cli.Context) error {
-	return game.Startup()
+	return gate.Startup()
 }

@@ -12,7 +12,7 @@ var (
 	database *xorm.Engine
 )
 
-func Startup() error {
+func initOrm() error {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s",
 		viper.GetString("database.username"),
 		viper.GetString("database.password"),

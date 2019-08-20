@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/urfave/cli"
-	"server/game"
+	"server/db"
 )
 
 var DB = cli.Command{
@@ -13,5 +13,5 @@ var DB = cli.Command{
 }
 
 func runDB(c *cli.Context) error {
-	return game.Startup()
+	return db.Startup()
 }
