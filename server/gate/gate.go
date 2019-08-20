@@ -1,13 +1,12 @@
 package gate
 
 import (
-	"fmt"
 	"math/rand"
+	"net/http"
 	"time"
 
 	"github.com/lonng/nano"
 	"github.com/lonng/nano/component"
-	"github.com/lonng/nano/pipeline"
 	"github.com/lonng/nano/serialize/json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -24,20 +23,19 @@ func Startup() error {
 
 	// register game handler
 	comps := &component.Components{}
+	comps.Register(&ServiceGate{})
 
-	// crypto
-	c := newCrypto()
-	pip := pipeline.New()
-	pip.Inbound().PushBack(c.inbound)
-	pip.Outbound().PushBack(c.outbound)
-
-	addr := fmt.Sprintf("%s:%d", viper.GetString("gate.host"), viper.GetInt("gate.port"))
-	nano.Listen(addr,
-		nano.WithPipeline(pip),
+	nano.Listen(viper.GetString("gate.listen"),
+		nano.WithAdvertiseAddr(viper.GetString("master.listen")),
+		nano.WithClientAddr(viper.GetString("gate.client_listen")),
 		nano.WithHeartbeatInterval(time.Duration(viper.GetInt("core.heartbeat"))*time.Second),
 		nano.WithLogger(logger),
 		nano.WithSerializer(json.NewSerializer()),
 		nano.WithComponents(comps),
+		nano.WithIsWebsocket(true),
+		nano.WithWSPath("/nano"),
+		nano.WithCheckOriginFunc(func(_ *http.Request) bool { return true }),
+		nano.WithDebugMode(),
 	)
 
 	return nil

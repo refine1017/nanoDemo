@@ -27,7 +27,6 @@ func Startup() error {
 
 	addr := fmt.Sprintf("%s:%d", viper.GetString("game.host"), viper.GetInt("game.port"))
 	nano.Listen(addr,
-		nano.WithHeartbeatInterval(time.Duration(viper.GetInt("core.heartbeat"))*time.Second),
 		nano.WithLogger(logger),
 		nano.WithSerializer(json.NewSerializer()),
 		nano.WithComponents(comps),

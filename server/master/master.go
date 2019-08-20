@@ -1,7 +1,8 @@
-package login
+package master
 
 import (
-	"fmt"
+	"github.com/lonng/nano/examples/cluster/master"
+	"github.com/lonng/nano/session"
 	"math/rand"
 	"time"
 
@@ -13,23 +14,25 @@ import (
 )
 
 var (
-	logger = logrus.WithField("component", "login")
+	logger = logrus.WithField("component", "master")
 )
 
 func Startup() error {
 	rand.Seed(time.Now().Unix())
 
-	logger.Info("login service startup")
+	logger.Info("master service startup")
 
 	// register game handler
 	comps := &component.Components{}
-	comps.Register(&ServiceLogin{})
 
-	addr := fmt.Sprintf("%s:%d", viper.GetString("login.host"), viper.GetInt("login.port"))
-	nano.Listen(addr,
+	session.Lifetime.OnClosed(master.OnSessionClosed)
+
+	nano.Listen(viper.GetString("master.listen"),
+		nano.WithMaster(),
 		nano.WithLogger(logger),
 		nano.WithSerializer(json.NewSerializer()),
 		nano.WithComponents(comps),
+		nano.WithDebugMode(),
 	)
 
 	return nil

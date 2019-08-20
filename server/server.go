@@ -15,6 +15,7 @@ func main() {
 	app.Usage = "server"
 
 	app.Commands = []cli.Command{
+		cmd.Master,
 		cmd.Gate,
 		cmd.Login,
 		cmd.Game,
