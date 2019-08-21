@@ -4,6 +4,7 @@ import (
 	"github.com/lonng/nano/component"
 	"github.com/lonng/nano/session"
 	"server/protocol"
+	"time"
 )
 
 type ServiceDB struct {
@@ -60,33 +61,29 @@ func (s *ServiceDB) RpcLoadPlayer(sess *session.Session, req *protocol.RpcLoadPl
 	has, err := database.Table(&Player{}).Where("username = ?", req.Username).Get(player)
 	if err != nil {
 		res.WithError(err)
-		return sess.Push("ServiceLogin.Register", res)
+		return sess.Push("ServiceLogin.Login", res)
 	}
 
 	if !has {
 		res.WithErrorMsg("no found")
-		return sess.Push("ServiceLogin.Register", res)
+		return sess.Push("ServiceLogin.Login", res)
 	}
 
 	if err := sess.RPC("ServiceGame.RpcPlayerLogin", &protocol.RpcPlayerLoginReq{
 		Player: player.Protocol(),
 	}); err != nil {
 		res.WithError(err)
-		return sess.Push("ServiceLogin.Register", res)
+		return sess.Push("ServiceLogin.Login", res)
+	}
+
+	player.LastLoginIp = sess.RemoteAddr().String()
+	player.LastLoginTime = time.Now().Unix()
+
+	if _, err := database.Update(player, &Player{Username: player.Username}); err != nil {
+		res.WithError(err)
+		return sess.Push("ServiceLogin.Login", res)
 	}
 
 	res.Player = player.Protocol()
 	return sess.Push("ServiceLogin.Login", res)
-}
-
-func (s *ServiceDB) RpcSavePlayer(sess *session.Session, req *protocol.RpcSavePlayerReq) error {
-	player := &Player{}
-	player.Parse(req.Player)
-
-	_, err := database.Update(player, &Player{Username: player.Username})
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
