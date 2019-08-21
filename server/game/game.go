@@ -1,7 +1,6 @@
 package game
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -25,11 +24,12 @@ func Startup() error {
 	comps := &component.Components{}
 	comps.Register(playerManager)
 
-	addr := fmt.Sprintf("%s:%d", viper.GetString("game.host"), viper.GetInt("game.port"))
-	nano.Listen(addr,
+	nano.Listen(viper.GetString("game.listen"),
+		nano.WithAdvertiseAddr(viper.GetString("master.listen")),
 		nano.WithLogger(logger),
 		nano.WithSerializer(json.NewSerializer()),
 		nano.WithComponents(comps),
+		nano.WithDebugMode(),
 	)
 
 	return nil

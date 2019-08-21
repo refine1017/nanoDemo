@@ -6,19 +6,19 @@
     let sendMsg = "";
     let msgs = {
         "Hello": {
-            "topic" : 'ServiceGate.Hello',
+            "route" : 'ServiceGate.Hello',
             "body": '{"name":"nano"}'
         },
         "Register": {
-            "topic" : 'Login/HD_Register',
+            "route" : 'ServiceLogin.Register',
             "body": '{"username": "nano", "nickname": "nano"}'
         },
         "Login": {
-            "topic" : 'Login/HD_Login',
+            "route" : 'ServiceLogin.Login',
             "body": '{"username": "nano"}'
         },
         "Talk": {
-            "topic" : 'Game/HD_Talk',
+            "route" : 'ServiceGame.Talk',
             "body": '{"msg": "nano"}'
         },
     };
@@ -53,6 +53,9 @@
             document.getElementById("connectStatus").innerHTML = "Success";
 
             connectStatus = true;
+
+            starx.on("ServiceLogin.Register", showResponse);
+            starx.on("ServiceLogin.Login", showResponse);
         };
 
         let onConnectionLost = function () {
@@ -78,10 +81,6 @@
         document.getElementById('responseTxt').innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss") + " -- " + res + "<br/>" + document.getElementById('responseTxt').innerHTML;
     }
 
-    function showNotify(data) {
-        document.getElementById('responseTxt').innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss") + " -- Notify: " + data.payloadString + "<br/>" + document.getElementById('responseTxt').innerHTML;
-    }
-
     function sendRequest() {
         if (connectStatus === false) {
             alert("Connection is fail");
@@ -93,10 +92,10 @@
             return
         }
 
-        let topic = msgs[sendMsg].topic;
+        let route = msgs[sendMsg].route;
         let body = document.getElementById('requestTxt').value;
 
-        starx.request(topic, JSON.parse(body), showResponse);
+        starx.request(route, JSON.parse(body), showResponse);
     }
 
 </script>

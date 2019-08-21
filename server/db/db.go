@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -28,13 +27,14 @@ func Startup() error {
 
 	// register game handler
 	comps := &component.Components{}
-	comps.Register(playerManager)
+	comps.Register(&ServiceDB{})
 
-	addr := fmt.Sprintf("%s:%d", viper.GetString("db.host"), viper.GetInt("db.port"))
-	nano.Listen(addr,
+	nano.Listen(viper.GetString("db.listen"),
+		nano.WithAdvertiseAddr(viper.GetString("master.listen")),
 		nano.WithLogger(logger),
 		nano.WithSerializer(json.NewSerializer()),
 		nano.WithComponents(comps),
+		nano.WithDebugMode(),
 	)
 
 	return nil

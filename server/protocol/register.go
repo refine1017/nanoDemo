@@ -6,5 +6,6 @@ type RegisterReq struct {
 }
 
 type RegisterRes struct {
-	Player *Player `json:"player"`
+	Error
+	Player Player `json:"player"`
 }

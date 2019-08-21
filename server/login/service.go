@@ -3,7 +3,6 @@ package login
 import (
 	"github.com/lonng/nano/component"
 	"github.com/lonng/nano/session"
-	"github.com/sirupsen/logrus"
 	"server/protocol"
 )
 
@@ -12,11 +11,9 @@ type ServiceLogin struct {
 }
 
 func (s *ServiceLogin) Register(sess *session.Session, req *protocol.RegisterReq) error {
-	logrus.Info("register")
-	return nil
+	return sess.RPC("ServiceDB.RpcCreatePlayer", &protocol.RpcCreatePlayerReq{Username: req.Username, Nickname: req.Nickname})
 }
 
 func (s *ServiceLogin) Login(sess *session.Session, req *protocol.LoginReq) error {
-	logrus.Info("login")
-	return nil
+	return sess.RPC("ServiceDB.RpcLoadPlayer", &protocol.RpcLoadPlayerReq{Username: req.Username})
 }

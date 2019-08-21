@@ -1,7 +1,6 @@
 package login
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -25,11 +24,12 @@ func Startup() error {
 	comps := &component.Components{}
 	comps.Register(&ServiceLogin{})
 
-	addr := fmt.Sprintf("%s:%d", viper.GetString("login.host"), viper.GetInt("login.port"))
-	nano.Listen(addr,
+	nano.Listen(viper.GetString("login.listen"),
+		nano.WithAdvertiseAddr(viper.GetString("master.listen")),
 		nano.WithLogger(logger),
 		nano.WithSerializer(json.NewSerializer()),
 		nano.WithComponents(comps),
+		nano.WithDebugMode(),
 	)
 
 	return nil

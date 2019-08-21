@@ -5,5 +5,6 @@ type LoginReq struct {
 }
 
 type LoginRes struct {
-	Player *Player `json:"player"`
+	Error
+	Player Player `json:"player"`
 }
