@@ -68,6 +68,13 @@ func (s *ServiceDB) RpcLoadPlayer(sess *session.Session, req *protocol.RpcLoadPl
 		return sess.Push("ServiceLogin.Register", res)
 	}
 
+	if err := sess.RPC("ServiceGame.RpcPlayerLogin", &protocol.RpcPlayerLoginReq{
+		Player: player.Protocol(),
+	}); err != nil {
+		res.WithError(err)
+		return sess.Push("ServiceLogin.Register", res)
+	}
+
 	res.Player = player.Protocol()
 	return sess.Push("ServiceLogin.Login", res)
 }

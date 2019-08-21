@@ -22,7 +22,7 @@ func Startup() error {
 
 	logger.Info("master service startup")
 
-	// register game handler
+	// register handler
 	comps := &component.Components{}
 
 	session.Lifetime.OnClosed(master.OnSessionClosed)

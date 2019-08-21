@@ -21,7 +21,7 @@ func Startup() error {
 
 	logger.Info("gate service startup")
 
-	// register game handler
+	// register handler
 	comps := &component.Components{}
 	comps.Register(&ServiceGate{})
 

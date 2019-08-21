@@ -56,11 +56,7 @@
 
             starx.on("ServiceLogin.Register", showResponse);
             starx.on("ServiceLogin.Login", showResponse);
-        };
-
-        let onConnectionLost = function () {
-            document.getElementById("connectStatus").style.color = "red";
-            document.getElementById("connectStatus").innerHTML = "Fail"
+            starx.on("ServiceGame.TalkNotify", showResponse);
         };
 
         starx.init({host: serverUrl, port: serverPort, path: '/nano'}, onSuccess);

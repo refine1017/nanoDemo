@@ -20,9 +20,9 @@ func Startup() error {
 
 	logger.Info("game service startup")
 
-	// register game handler
+	// register handler
 	comps := &component.Components{}
-	comps.Register(playerManager)
+	comps.Register(&ServiceGame{})
 
 	nano.Listen(viper.GetString("game.listen"),
 		nano.WithAdvertiseAddr(viper.GetString("master.listen")),

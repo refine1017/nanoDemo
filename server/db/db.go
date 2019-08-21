@@ -25,7 +25,7 @@ func Startup() error {
 
 	logger.Info("game service startup")
 
-	// register game handler
+	// register handler
 	comps := &component.Components{}
 	comps.Register(&ServiceDB{})
 
